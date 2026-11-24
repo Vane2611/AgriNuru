@@ -1,0 +1,265 @@
+import { useEffect, useRef, useState } from 'react'
+
+import {
+  listProductionActivities,
+  type ProductionActivity,
+} from '../../services/resources/productionActivitiesApi'
+import type { GrowingSeason } from '../../services/resources/growingSeasonsApi'
+import { activityTypeLabel } from './ProductionActivityFormModal'
+import { ProductionActivityFormModal } from './ProductionActivityFormModal'
+import { ProductionActivityDeleteModal } from './ProductionActivityDeleteModal'
+import type { ActivityModalState } from './types'
+
+type ProductionActivitiesPanelProps = {
+  season: GrowingSeason
+}
+
+function formatDate(isoDate: string): string {
+  const [year, month, day] = isoDate.split('-').map(Number)
+  const d = new Date(year, month - 1, day)
+  return d.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+}
+
+function truncate(text: string, max: number): string {
+  if (text.length <= max) return text
+  return text.slice(0, max - 1) + '…'
+}
+
+export function ProductionActivitiesPanel({ season }: ProductionActivitiesPanelProps) {
+  const [records, setRecords] = useState<ProductionActivity[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [fetchError, setFetchError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [modalState, setModalState] = useState<ActivityModalState>({ type: 'none' })
+
+  const isMountedRef = useRef(true)
+
+  useEffect(() => {
+    isMountedRef.current = true
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
+
+  // Auto-dismiss success message after 4 seconds
+  useEffect(() => {
+    if (!successMessage) return
+    const timer = window.setTimeout(() => {
+      setSuccessMessage(null)
+    }, 4000)
+    return () => window.clearTimeout(timer)
+  }, [successMessage])
+
+  const fetchRecords = useRef(async (seasonId: number) => {
+    if (isMountedRef.current) {
+      setLoading(true)
+      setFetchError(null)
+    }
+    try {
+      const data = await listProductionActivities({ growing_season_id: seasonId })
+      if (isMountedRef.current) {
+        const sorted = [...data].sort(
+          (a, b) =>
+            new Date(b.activity_date).getTime() - new Date(a.activity_date).getTime(),
+        )
+        setRecords(sorted)
+        setLoading(false)
+      }
+    } catch (err: unknown) {
+      if (isMountedRef.current) {
+        setFetchError(
+          err instanceof Error ? err.message : 'Unable to load activities.',
+        )
+        setLoading(false)
+      }
+    }
+  })
+
+  useEffect(() => {
+    setRecords([])
+    setFetchError(null)
+    void fetchRecords.current(season.id)
+  }, [season.id])
+
+  function handleSuccess(activity: ProductionActivity, verb: string) {
+    void fetchRecords.current(season.id)
+    setSuccessMessage(`Activity ${verb} successfully.`)
+  }
+
+  function handleDeleted(_id: number) {
+    void fetchRecords.current(season.id)
+    setSuccessMessage('Activity deleted successfully.')
+  }
+
+  return (
+    <section aria-labelledby="activities-panel-title" className="fields-panel">
+      <div className="fields-panel-header">
+        <div className="fields-panel-title-group">
+          <h3 id="activities-panel-title">Production Activities</h3>
+          <p className="fields-panel-subtitle">
+            All activities recorded for this growing season.
+          </p>
+        </div>
+        <button
+          className="farms-btn-primary"
+          onClick={() => setModalState({ type: 'createActivity' })}
+          type="button"
+        >
+          <i aria-hidden="true" className="bi bi-plus-lg" />
+          Add Activity
+        </button>
+      </div>
+
+      {successMessage && (
+        <div className="farms-alert farms-alert-success" role="status">
+          <i aria-hidden="true" className="bi bi-check-circle-fill" />
+          <div className="farms-alert-content">{successMessage}</div>
+          <button
+            aria-label="Dismiss message"
+            className="farms-alert-dismiss"
+            onClick={() => setSuccessMessage(null)}
+            type="button"
+          >
+            <i aria-hidden="true" className="bi bi-x-lg" />
+          </button>
+        </div>
+      )}
+
+      {loading && records.length === 0 && (
+        <div aria-busy="true" aria-live="polite">
+          {[0, 1, 2].map((i) => (
+            <div
+              className="dashboard-skeleton"
+              key={i}
+              style={{ height: '44px', borderRadius: '8px', marginBottom: '8px' }}
+            />
+          ))}
+        </div>
+      )}
+
+      {fetchError && !loading && (
+        <div className="farms-alert" role="alert">
+          <i aria-hidden="true" className="bi bi-exclamation-circle-fill" />
+          <div className="farms-alert-content">
+            <strong>Unable to load activities:</strong> {fetchError}
+            <div style={{ marginTop: '8px' }}>
+              <button
+                className="farms-btn-secondary"
+                onClick={() => void fetchRecords.current(season.id)}
+                style={{ minHeight: '32px', padding: '4px 10px', fontSize: '12px' }}
+                type="button"
+              >
+                <i aria-hidden="true" className="bi bi-arrow-clockwise" />
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!loading && !fetchError && records.length === 0 && (
+        <div className="farms-empty-state">
+          <div className="farms-empty-icon">
+            <i aria-hidden="true" className="bi bi-calendar-check" />
+          </div>
+          <h3>No activities recorded yet</h3>
+          <p>
+            Add the first activity for this growing season, such as land preparation,
+            planting or irrigation.
+          </p>
+          <button
+            className="farms-btn-primary"
+            onClick={() => setModalState({ type: 'createActivity' })}
+            type="button"
+          >
+            <i aria-hidden="true" className="bi bi-plus-lg" />
+            Add Activity
+          </button>
+        </div>
+      )}
+
+      {!loading && !fetchError && records.length > 0 && (
+        <div className="fields-table-wrapper">
+          <table className="fields-table">
+            <thead>
+              <tr>
+                <th>Activity Type</th>
+                <th>Activity Date</th>
+                <th>Notes</th>
+                <th style={{ textAlign: 'right' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {records.map((activity) => (
+                <tr key={activity.id}>
+                  <td>{activityTypeLabel(activity.activity_type)}</td>
+                  <td>{formatDate(activity.activity_date)}</td>
+                  <td style={{ color: activity.notes ? 'var(--app-ink)' : 'var(--app-muted)' }}>
+                    {activity.notes ? truncate(activity.notes, 80) : '—'}
+                  </td>
+                  <td style={{ textAlign: 'right' }}>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <button
+                        aria-label={`Edit activity on ${formatDate(activity.activity_date)}`}
+                        className="farm-card-btn"
+                        onClick={() =>
+                          setModalState({ type: 'editActivity', activity })
+                        }
+                        title="Edit activity"
+                        type="button"
+                      >
+                        <i aria-hidden="true" className="bi bi-pencil" />
+                      </button>
+                      <button
+                        aria-label={`Delete activity on ${formatDate(activity.activity_date)}`}
+                        className="farm-card-btn farm-card-btn--danger"
+                        onClick={() =>
+                          setModalState({ type: 'deleteActivity', activity })
+                        }
+                        title="Delete activity"
+                        type="button"
+                      >
+                        <i aria-hidden="true" className="bi bi-trash3" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <ProductionActivityFormModal
+        growingSeasonId={season.id}
+        initialActivity={
+          modalState.type === 'editActivity' ? modalState.activity : null
+        }
+        isOpen={
+          modalState.type === 'createActivity' || modalState.type === 'editActivity'
+        }
+        onClose={() => setModalState({ type: 'none' })}
+        onSuccess={(activity) =>
+          handleSuccess(
+            activity,
+            modalState.type === 'editActivity' ? 'updated' : 'added',
+          )
+        }
+        plantingDate={season.planting_date}
+      />
+
+      <ProductionActivityDeleteModal
+        activity={
+          modalState.type === 'deleteActivity' ? modalState.activity : null
+        }
+        isOpen={modalState.type === 'deleteActivity'}
+        onClose={() => setModalState({ type: 'none' })}
+        onSuccess={handleDeleted}
+      />
+    </section>
+  )
+}
