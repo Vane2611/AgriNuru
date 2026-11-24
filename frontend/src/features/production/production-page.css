@@ -1,0 +1,304 @@
+/* Production Management Page Styles */
+
+/* ─── Page Layout ─────────────────────────────────────────────────────────── */
+
+.production-page {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+}
+
+.production-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.production-eyebrow {
+  margin: 0 0 4px;
+  color: #6d7d75;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.production-title {
+  margin: 0;
+  color: var(--app-forest);
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1.2;
+}
+
+/* ─── Two-column Master-Detail Layout ─────────────────────────────────────── */
+
+.production-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .production-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Season List Sidebar ──────────────────────────────────────────────────── */
+
+.production-sidebar-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ─── Detail Content Panel ─────────────────────────────────────────────────── */
+
+.production-content-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* ─── Season Card ──────────────────────────────────────────────────────────── */
+
+.season-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1.5px solid var(--app-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(32 63 49 / 4%);
+  cursor: pointer;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+  text-align: left;
+  outline: none;
+}
+
+.season-card:hover {
+  border-color: #b5c7b3;
+  box-shadow: 0 6px 16px rgb(32 63 49 / 8%);
+}
+
+.season-card:focus-visible {
+  outline: 3px solid #789a72;
+  outline-offset: 2px;
+}
+
+.season-card.is-selected {
+  border-color: var(--app-forest);
+  background: #fcfffa;
+  box-shadow: 0 0 0 1px var(--app-forest), 0 8px 20px rgb(23 61 50 / 8%);
+}
+
+.season-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.season-card-title {
+  margin: 0;
+  color: var(--app-forest);
+  font-size: 15px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.season-card-variety {
+  margin: 0;
+  color: var(--app-muted);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.season-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--app-muted);
+  font-size: 12px;
+}
+
+.season-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.season-card-meta i {
+  color: #437357;
+  flex-shrink: 0;
+}
+
+.season-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid #edf0eb;
+}
+
+/* ─── Status Badge ─────────────────────────────────────────────────────────── */
+
+.season-status-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.season-status--planned {
+  background: #edf1f8;
+  color: #3a5080;
+}
+
+.season-status--in-progress {
+  background: #fef3e2;
+  color: #92510a;
+}
+
+.season-status--completed {
+  background: #e8f1e6;
+  color: #275239;
+}
+
+.season-status--abandoned {
+  background: #fbeeed;
+  color: #8c2a21;
+}
+
+/* ─── Tabs ─────────────────────────────────────────────────────────────────── */
+
+.production-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 4px;
+  background: #f1f4ef;
+  border-radius: 10px;
+}
+
+.production-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-height: 36px;
+  padding: 6px 14px;
+  color: var(--app-muted);
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease;
+  white-space: nowrap;
+  justify-content: center;
+}
+
+.production-tab-btn:hover {
+  color: var(--app-forest);
+  background: #e4ede0;
+}
+
+.production-tab-btn:focus-visible {
+  outline: 3px solid #789a72;
+  outline-offset: 2px;
+}
+
+.production-tab-btn.is-active {
+  color: #fff;
+  background: var(--app-forest);
+  font-weight: 650;
+}
+
+/* ─── Empty State (no seasons) ─────────────────────────────────────────────── */
+
+.production-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 44px 20px;
+  background: #fff;
+  border: 1px dashed #cad4c7;
+  border-radius: 14px;
+}
+
+/* ─── Season Detail Header ─────────────────────────────────────────────────── */
+
+.season-detail-header {
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px solid var(--app-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(32 63 49 / 4%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.season-detail-title {
+  margin: 0;
+  color: var(--app-forest);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.season-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--app-muted);
+  font-size: 12.5px;
+}
+
+.season-detail-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.season-detail-meta i {
+  color: #437357;
+}
+
+/* ─── No-Season Prompt ─────────────────────────────────────────────────────── */
+
+.production-no-season {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  background: #fff;
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  color: var(--app-muted);
+  font-size: 14px;
+  gap: 12px;
+}
+
+.production-no-season i {
+  font-size: 36px;
+  color: #b5c7b3;
+}

@@ -86,18 +86,15 @@ export function ProductionCostsPanel({ season }: ProductionCostsPanelProps) {
     return () => window.clearTimeout(timer)
   }, [successMessage])
 
-  const seasonIdRef = useRef(season.id)
-
   const fetchRecords = useRef(async (seasonId: number) => {
     if (isMountedRef.current) {
       setLoading(true)
       setFetchError(null)
     }
     try {
-      const all = await listProductionCosts()
+      const data = await listProductionCosts({ growing_season_id: seasonId })
       if (isMountedRef.current) {
-        const filtered = all.filter((c) => c.growing_season === seasonId)
-        const sorted = [...filtered].sort((a, b) => {
+        const sorted = [...data].sort((a, b) => {
           if (!a.cost_date && !b.cost_date) return 0
           if (!a.cost_date) return 1
           if (!b.cost_date) return -1
@@ -117,19 +114,18 @@ export function ProductionCostsPanel({ season }: ProductionCostsPanelProps) {
   })
 
   useEffect(() => {
-    seasonIdRef.current = season.id
     setRecords([])
     setFetchError(null)
     void fetchRecords.current(season.id)
   }, [season.id])
 
   function handleSuccess(_cost: ProductionCost, verb: string) {
-    void fetchRecords.current(seasonIdRef.current)
+    void fetchRecords.current(season.id)
     setSuccessMessage(`Cost record ${verb} successfully.`)
   }
 
   function handleDeleted(_id: number) {
-    void fetchRecords.current(seasonIdRef.current)
+    void fetchRecords.current(season.id)
     setSuccessMessage('Cost record deleted successfully.')
   }
 
@@ -190,7 +186,7 @@ export function ProductionCostsPanel({ season }: ProductionCostsPanelProps) {
             <div style={{ marginTop: '8px' }}>
               <button
                 className="farms-btn-secondary"
-                onClick={() => void fetchRecords.current(seasonIdRef.current)}
+                onClick={() => void fetchRecords.current(season.id)}
                 style={{ minHeight: '32px', padding: '4px 10px', fontSize: '12px' }}
                 type="button"
               >

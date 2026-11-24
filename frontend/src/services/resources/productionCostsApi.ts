@@ -49,10 +49,26 @@ async function productionCostRequest<T>(
   return authenticatedJsonRequest<T>(path, options)
 }
 
-export async function listProductionCosts(): Promise<ProductionCost[]> {
+export interface ProductionCostListParams {
+  farm_id?: number
+  field_id?: number
+  crop_id?: number
+  growing_season_id?: number
+  start_date?: string
+  end_date?: string
+}
+
+export async function listProductionCosts(params?: ProductionCostListParams): Promise<ProductionCost[]> {
+  const query = params
+    ? '?' + new URLSearchParams(
+        Object.entries(params)
+          .filter(([, v]) => v !== undefined)
+          .map(([k, v]) => [k, String(v)]),
+      ).toString()
+    : ''
   const response =
     await productionCostRequest<ApiListResponse<ProductionCost>>(
-      '/api/production/costs/',
+      `/api/production/costs/${query}`,
     )
   return listResults(response)
 }

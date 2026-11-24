@@ -4,6 +4,8 @@ import { AppLayout } from '../components/layout/AppLayout'
 import { SectionPlaceholder } from '../components/layout/SectionPlaceholder'
 import { DashboardPage } from '../features/dashboard/DashboardPage'
 import { FarmsPage } from '../features/farms/FarmsPage'
+import { CropsPage } from '../features/crops/CropsPage'
+import { ProductionPage } from '../features/production/ProductionPage'
 import { LoginPage } from '../features/auth/LoginPage'
 import { RegisterPage } from '../features/auth/RegisterPage'
 import { GuestRoute, ProtectedRoute } from './providers/RouteGuards'
@@ -47,21 +49,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'crops',
-        element: (
-          <SectionPlaceholder
-            title="Crop Library"
-            description="Crop and variety information will be available here."
-          />
-        ),
+        element: <CropsPage />,
       },
       {
         path: 'production',
-        element: (
-          <SectionPlaceholder
-            title="Production"
-            description="Growing seasons and production records will be available here."
-          />
-        ),
+        element: <ProductionPage />,
       },
       {
         path: 'markets',
