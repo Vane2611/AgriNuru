@@ -8,6 +8,7 @@ import { CropsPage } from '../features/crops/CropsPage'
 import { ProductionPage } from '../features/production/ProductionPage'
 import { LoginPage } from '../features/auth/LoginPage'
 import { RegisterPage } from '../features/auth/RegisterPage'
+import { MarketsPage } from '../features/markets/MarketsPage'
 import { GuestRoute, ProtectedRoute } from './providers/RouteGuards'
 
 export const router = createBrowserRouter([
@@ -57,12 +58,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'markets',
-        element: (
-          <SectionPlaceholder
-            title="Market Prices"
-            description="Recorded market information will be available here."
-          />
-        ),
+        element: <MarketsPage />,
       },
       {
         path: 'decisions',

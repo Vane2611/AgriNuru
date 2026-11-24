@@ -85,7 +85,7 @@ export function ProductionActivitiesPanel({ season }: ProductionActivitiesPanelP
     void fetchRecords.current(season.id)
   }, [season.id])
 
-  function handleSuccess(activity: ProductionActivity, verb: string) {
+  function handleSuccess(_activity: ProductionActivity, verb: string) {
     void fetchRecords.current(season.id)
     setSuccessMessage(`Activity ${verb} successfully.`)
   }
