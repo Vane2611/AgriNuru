@@ -378,6 +378,7 @@ class ProductionAPITests(APITestCase):
 
     def test_activity_and_harvest_date_validation(self):
         self.authenticate_as()
+        # Non-exempt activity type before planting date must be rejected
         activity_response = self.client.post(
             self.activity_list_url,
             {
@@ -405,6 +406,97 @@ class ProductionAPITests(APITestCase):
         )
         self.assertEqual(harvest_response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("harvested_on", harvest_response.data)
+
+    def test_land_preparation_activity_date_validation(self):
+        """
+        Land preparation is a pre-planting activity.  The planting-date lower
+        bound must not apply to it, while remaining in force for every other
+        activity type.
+
+        Season planting date: 2025-01-10
+        """
+        self.authenticate_as()
+
+        # 1. Land preparation before planting date — must be accepted (201).
+        response = self.client.post(
+            self.activity_list_url,
+            {
+                "growing_season": self.season.pk,
+                "activity_type": "land_preparation",
+                "activity_date": "2025-01-05",
+            },
+            format="json",
+        )
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED,
+            msg="Land preparation before planting date must be accepted.",
+        )
+
+        # 2. Land preparation on the planting date — must be accepted (201).
+        response = self.client.post(
+            self.activity_list_url,
+            {
+                "growing_season": self.season.pk,
+                "activity_type": "land_preparation",
+                "activity_date": "2025-01-10",
+            },
+            format="json",
+        )
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED,
+            msg="Land preparation on planting date must be accepted.",
+        )
+
+        # 3. Planting activity on the planting date — must be accepted (201).
+        response = self.client.post(
+            self.activity_list_url,
+            {
+                "growing_season": self.season.pk,
+                "activity_type": "planting",
+                "activity_date": "2025-01-10",
+            },
+            format="json",
+        )
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED,
+            msg="Planting on planting date must be accepted.",
+        )
+
+        # 4. Non-exempt activity (weeding) before planting — must be rejected (400).
+        response = self.client.post(
+            self.activity_list_url,
+            {
+                "growing_season": self.season.pk,
+                "activity_type": "weeding",
+                "activity_date": "2025-01-05",
+            },
+            format="json",
+        )
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST,
+            msg="Weeding before planting date must be rejected.",
+        )
+        self.assertIn("activity_date", response.data)
+
+        # 5. Valid activity on a date after planting — must be accepted (201).
+        response = self.client.post(
+            self.activity_list_url,
+            {
+                "growing_season": self.season.pk,
+                "activity_type": "fertiliser_application",
+                "activity_date": "2025-02-01",
+            },
+            format="json",
+        )
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED,
+            msg="Activity after planting date must be accepted.",
+        )
 
     def test_cost_and_harvest_quantities_must_be_positive(self):
         self.authenticate_as()

@@ -266,7 +266,7 @@ export function HarvestRecordFormModal({
                       min="0.001"
                       onChange={(e) => handleChange('quantity', e.target.value)}
                       placeholder="e.g. 250"
-                      step="0.01"
+                      step="0.001"
                       type="number"
                       value={values.quantity}
                     />

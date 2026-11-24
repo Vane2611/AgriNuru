@@ -49,7 +49,7 @@ export function LoginPage() {
           )
         } else if (error.status === 0) {
           setSubmissionError(
-            'Unable to connect to AgriNuru. Check your connection and try again.',
+            'Unable to connect to Grinab. Check your connection and try again.',
           )
         } else {
           setSubmissionError(
@@ -159,7 +159,7 @@ export function LoginPage() {
       </form>
 
       <p className="auth-switch">
-        New to AgriNuru?{' '}
+        New to Grinab?{' '}
         <Link className="auth-link" to="/register">
           Create an account
         </Link>

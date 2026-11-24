@@ -155,6 +155,10 @@ class ProductionActivity(models.Model):
 
     def clean(self):
         super().clean()
+        # Land preparation is a pre-planting activity and is explicitly exempt
+        # from the planting-date lower bound.
+        if self.activity_type == self.ActivityType.LAND_PREPARATION:
+            return
         if (
             self.growing_season_id
             and self.activity_date

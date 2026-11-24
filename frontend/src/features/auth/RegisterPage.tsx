@@ -84,7 +84,7 @@ export function RegisterPage() {
     } else if (!Object.keys(nextErrors).length) {
       setSubmissionError(
         error.status === 0
-          ? 'Unable to connect to AgriNuru. Check your connection and try again.'
+          ? 'Unable to connect to Grinab. Check your connection and try again.'
           : 'Registration could not be completed. Please review your information.',
       )
     }
@@ -145,13 +145,13 @@ export function RegisterPage() {
         confirm_password: values.confirmPassword,
       })
       setSuccessMessage(
-        'Account created successfully. You can now sign in to AgriNuru.',
+        'Account created successfully. You can now sign in to Grinab.',
       )
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.status === 0) {
           setSubmissionError(
-            'Unable to connect to AgriNuru. Check your connection and try again.',
+            'Unable to connect to Grinab. Check your connection and try again.',
           )
         } else if (Object.keys(error.fields).length > 0) {
           mapFieldErrors(error)
@@ -164,7 +164,7 @@ export function RegisterPage() {
         }
       } else {
         setSubmissionError(
-          'Unable to connect to AgriNuru. Check your connection and try again.',
+          'Unable to connect to Grinab. Check your connection and try again.',
         )
       }
     } finally {
@@ -208,7 +208,7 @@ export function RegisterPage() {
 
   return (
     <AuthPageLayout page="register">
-      <h1 className="auth-heading">Create your AgriNuru account</h1>
+      <h1 className="auth-heading">Create your Grinab account</h1>
       <p className="auth-intro">
         Bring your farm records together and make more informed decisions about
         production and markets.

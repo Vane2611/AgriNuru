@@ -7,6 +7,7 @@ from .views import (
     DecisionReportListCreateView,
     MarketComparisonDetailView,
     MarketComparisonListCreateView,
+    MLStatusView,
     ProductionPlanDetailView,
     ProductionPlanListCreateView,
 )
@@ -54,5 +55,10 @@ urlpatterns = [
         "market-comparisons/<int:pk>/",
         MarketComparisonDetailView.as_view(),
         name="market-comparison-detail",
+    ),
+    path(
+        "ml-status/",
+        MLStatusView.as_view(),
+        name="ml-status",
     ),
 ]

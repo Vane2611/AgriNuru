@@ -37,7 +37,7 @@ export function AppSidebar({
       id="app-navigation-sidebar"
     >
       <NavLink
-        aria-label="AgriNuru overview"
+        aria-label="Grinab overview"
         className="app-brand"
         onClick={onNavigate}
         to="/dashboard"
@@ -45,7 +45,7 @@ export function AppSidebar({
         <span aria-hidden="true" className="app-brand-mark">
           <i className="bi bi-leaf-fill" />
         </span>
-        <span className="app-brand-name">AgriNuru</span>
+        <span className="app-brand-name">Grinab</span>
       </NavLink>
 
       <div className="app-sidebar-section-label">Workspace</div>

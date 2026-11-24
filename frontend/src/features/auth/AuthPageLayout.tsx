@@ -9,12 +9,12 @@ type AuthPageLayoutProps = {
 export function AuthPageLayout({ children, page }: AuthPageLayoutProps) {
   return (
     <main className={`auth-page auth-page--${page}`}>
-      <section aria-label="AgriNuru account" className="auth-form-side">
-        <Link aria-label="AgriNuru home" className="auth-brand" to="/login">
+      <section aria-label="Grinab account" className="auth-form-side">
+        <Link aria-label="Grinab home" className="auth-brand" to="/login">
           <span aria-hidden="true" className="auth-brand-mark">
             <i className="bi bi-leaf-fill" />
           </span>
-          <span>AgriNuru</span>
+          <span>Grinab</span>
         </Link>
         <div className="auth-form-content">{children}</div>
         <p className="auth-form-footer">

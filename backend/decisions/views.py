@@ -6,6 +6,9 @@ from rest_framework import generics, serializers, status
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .ml_status import ML_READINESS_STATUS
 
 from farmers.models import FarmerProfile
 
@@ -338,3 +341,10 @@ class MarketComparisonDetailView(
             "price_observation__market_price__crop",
             "price_observation__market_price__market",
         )
+
+
+class MLStatusView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return Response(ML_READINESS_STATUS)

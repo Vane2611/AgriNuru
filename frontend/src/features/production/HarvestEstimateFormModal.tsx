@@ -268,7 +268,7 @@ export function HarvestEstimateFormModal({
                       min="0.001"
                       onChange={(e) => handleChange('estimated_quantity', e.target.value)}
                       placeholder="e.g. 500"
-                      step="0.01"
+                      step="0.001"
                       type="number"
                       value={values.estimated_quantity}
                     />

@@ -9,6 +9,7 @@ import { ProductionPage } from '../features/production/ProductionPage'
 import { LoginPage } from '../features/auth/LoginPage'
 import { RegisterPage } from '../features/auth/RegisterPage'
 import { MarketsPage } from '../features/markets/MarketsPage'
+import { DecisionsPage } from '../features/decisions/DecisionsPage'
 import { GuestRoute, ProtectedRoute } from './providers/RouteGuards'
 
 export const router = createBrowserRouter([
@@ -62,12 +63,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'decisions',
-        element: (
-          <SectionPlaceholder
-            title="Decisions & Reports"
-            description="Decision records and reports will be available here."
-          />
-        ),
+        element: <DecisionsPage />,
       },
       {
         path: 'settings',

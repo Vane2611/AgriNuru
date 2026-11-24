@@ -284,3 +284,90 @@
   color: var(--app-muted);
   font-size: 12px;
 }
+
+/* ─── Observation date-range filter bar ──────────────────────────────────── */
+
+.obs-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: #f8faf7;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  margin-bottom: 4px;
+}
+
+.obs-filter-fields {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.obs-date-input {
+  min-width: 140px;
+  max-width: 180px;
+}
+
+.obs-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 1px; /* optical alignment with the date inputs */
+}
+
+.obs-filter-error {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+}
+
+.obs-filter-hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .obs-filter-fields {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .obs-date-input {
+    max-width: 100%;
+  }
+}
+
+/* ─── County filter dropdown ─────────────────────────────────────────────── */
+
+.market-county-filter {
+  margin-bottom: 4px;
+}
+
+/* Empty state inside the sidebar when no markets match the county */
+.market-county-empty {
+  padding: 28px 16px;
+  border: 1px dashed var(--app-border);
+  border-radius: 12px;
+}
+
+/* Inline text button to reset the county filter */
+.market-county-reset-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--app-forest);
+  font-size: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.market-county-reset-link:hover,
+.market-county-reset-link:focus-visible {
+  color: #112d25;
+}

@@ -179,6 +179,14 @@ class ProductionActivitySerializer(FarmerOwnedSeasonSerializer):
             "activity_date",
             getattr(self.instance, "activity_date", None),
         )
+        activity_type = attrs.get(
+            "activity_type",
+            getattr(self.instance, "activity_type", None),
+        )
+        # Land preparation is a pre-planting activity and is explicitly exempt
+        # from the planting-date lower bound.
+        if activity_type == ProductionActivity.ActivityType.LAND_PREPARATION:
+            return attrs
         if (
             season is not None
             and activity_date is not None

@@ -179,7 +179,7 @@ async function fetchJson<T>(
     })
   } catch {
     throw new ApiError(
-      'Unable to reach AgriNuru. Check your connection and try again.',
+      'Unable to reach Grinab. Check your connection and try again.',
       0,
     )
   }

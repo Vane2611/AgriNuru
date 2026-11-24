@@ -34,7 +34,7 @@ export function AppHeader({
   const [isSigningOut, setIsSigningOut] = useState(false)
   const [logoutError, setLogoutError] = useState('')
   const profileMenuRef = useRef<HTMLDivElement>(null)
-  const pageTitle = pageTitles[pathname] ?? 'AgriNuru'
+  const pageTitle = pageTitles[pathname] ?? 'Grinab'
   const profileName =
     [user?.first_name, user?.last_name].filter(Boolean).join(' ').trim()
     || user?.username
@@ -78,7 +78,7 @@ export function AppHeader({
     } catch (error) {
       if (error instanceof ApiError && error.status === 0) {
         setLogoutError(
-          'Unable to reach AgriNuru. Check your connection and try again.',
+          'Unable to reach Grinab. Check your connection and try again.',
         )
       } else {
         setLogoutError('Sign out could not be completed. Please try again.')

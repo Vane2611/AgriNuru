@@ -197,8 +197,9 @@ export function GrowingSeasonDeleteModal({
               }}
             >
               <i aria-hidden="true" className="bi bi-info-circle me-1" />
-              <strong>Warning:</strong> This will permanently delete the growing season
-              and all its associated activities, costs, harvest estimates and harvest records.
+              <strong>Note:</strong> Deleting this growing season is only possible when it
+              has no associated production records. If activities, costs, harvest estimates
+              or harvest records are linked to it, deletion will be prevented.
             </div>
           </div>
 
